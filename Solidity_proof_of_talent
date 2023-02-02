@@ -8,20 +8,25 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
 contract ITrainedSolidity is ERC721, ERC721URIStorage, Pausable, Ownable, ERC721Burnable {
+    // El constructor inicializa la clase como un contrato ERC721 y establece el nombre y el símbolo del token
     constructor() ERC721("iTrained Solidity", "ITN") {}
 
+    // Esta función define la URI base que se utilizará para el almacenamiento de metadatos
     function _baseURI() internal pure override returns (string memory) {
         return "https://gateway.pinata.cloud/ipfs/QmSnnNFkcdHwKhy5pVasEHGqD9CMoEe2YRTTrTLnoVhsNW";
     }
 
+    // Pausa el contrato y bloquea todas las operaciones excepto las permitidas al dueño
     function pause() public onlyOwner {
         _pause();
     }
 
+    // Desbloquea el contrato y permite que todas las operaciones continúen
     function unpause() public onlyOwner {
         _unpause();
     }
 
+    // Emite un token nuevo de forma segura y establece la URI para su identificación
     function safeMint(address to, uint256 tokenId, string memory uri)
         public
         onlyOwner
@@ -30,6 +35,7 @@ contract ITrainedSolidity is ERC721, ERC721URIStorage, Pausable, Ownable, ERC721
         _setTokenURI(tokenId, uri);
     }
 
+    // Verifica que la transferencia del token esté permitida antes de realizarla
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
         internal
         whenNotPaused
@@ -38,12 +44,14 @@ contract ITrainedSolidity is ERC721, ERC721URIStorage, Pausable, Ownable, ERC721
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
-    // The following functions are overrides required by Solidity.
+    // Las siguientes funciones son sobrescritas para cumplir con los requisitos de Solidity
 
+    // Quema un token específico
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
     }
 
+    // Devuelve la URI de un token específico
     function tokenURI(uint256 tokenId)
         public
         view
